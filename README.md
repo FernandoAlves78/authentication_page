@@ -1,80 +1,94 @@
 # Authentication Portfolio Project
 
-Projeto de autenticacao em PHP para demonstrar boas praticas de backend, seguranca e organizacao de codigo em um fluxo real de login.
+A PHP authentication project showcasing solid backend practices, security, and code organization in a realistic login flow.
 
-## O que este projeto demonstra
+## What this project demonstrates
 
-- Login com validacao de credenciais e controle de sessao.
-- Fluxo de primeiro acesso com troca obrigatoria de senha.
-- Recuperacao de senha com token de uso unico e expiracao.
-- Protecoes basicas de seguranca:
-  - CSRF em formularios sensiveis.
-  - Hardening de sessao (`HttpOnly`, `SameSite`, `Secure` em HTTPS, `session_regenerate_id`).
-  - Token de reset salvo como hash no banco.
-  - Rate limiting basico para login e recuperacao.
+- Login with credential validation and session control.
+- First-access flow with mandatory password change.
+- Password recovery with single-use, expiring tokens.
+- Basic security measures:
+  - CSRF protection on sensitive forms.
+  - Session hardening (`HttpOnly`, `SameSite`, `Secure` on HTTPS, `session_regenerate_id`).
+  - Reset tokens stored as hashes in the database.
+  - Basic rate limiting for login and recovery.
 
-## Estrutura
+## Project layout
 
-- `public/`: paginas e handlers HTTP.
-- `public/assets/`: CSS e JavaScript.
-- `src/Security/auth_functions.php`: orquestracao de auth e seguranca.
-- `src/Support/connection.php`: conexao PDO compartilhada.
-- `src/Repositories/`: acesso a dados.
-- `src/Services/`: regras de negocio.
-- `config/`: configuracao da aplicacao.
-- `database/schema.sql`: schema inicial.
-- `database/seeds/create_demo_user.php`: seed de usuario demo.
-- `scripts/install_mailhog_laragon.ps1` / `scripts/start_mailhog.bat`: MailHog local (ver secao abaixo).
-- `tests/run_tests.php`: testes automatizados de fluxo critico.
+- `public/`: Pages and HTTP handlers.
+- `public/assets/`: CSS and JavaScript.
+- `src/Security/auth_functions.php`: Auth and security orchestration.
+- `src/Support/connection.php`: Shared PDO connection.
+- `src/Repositories/`: Data access.
+- `src/Services/`: Business rules.
+- `config/`: Application configuration.
+- `database/schema.sql`: Initial schema.
+- `database/seeds/create_demo_user.php`: Demo user seed.
+- `scripts/install_mailhog_laragon.ps1` / `scripts/start_mailhog.bat`: Local MailHog (see section below).
+- `tests/run_tests.php`: Automated tests for critical flows.
 
-## Setup local
+## Local setup
 
-1. Copie `config/config.example.php` para `config/config.php` e ajuste credenciais.
-2. Importe `database/schema.sql` no MySQL.
-3. (Opcional) Execute `php database/seeds/create_demo_user.php`.
-4. Suba o projeto no Laragon e acesse `http://localhost/authentication_page/public`.
+1. Copy `config/config.example.php` to `config/config.php` and set your credentials.
+2. Import `database/schema.sql` into MySQL.
+3. (Optional) Run `php database/seeds/create_demo_user.php`.
+4. Serve the project from Laragon and open `http://localhost/authentication_page/public`.
 
-## MailHog (e-mails de recuperacao em desenvolvimento)
+## MailHog (password recovery email in development)
 
-A recuperacao de senha envia por SMTP para **127.0.0.1:1025** quando `mail_smtp_enabled` esta ativo em `config/config.php`. O MailHog captura esses e-mails localmente.
+Password recovery sends via SMTP to **127.0.0.1:1025** when `mail_smtp_enabled` is enabled in `config/config.php`. MailHog captures those messages locally.
 
-**Se o Laragon nao iniciar o MailHog sozinho:**
+**If Laragon does not start MailHog automatically:**
 
-1. Tente no Laragon: **Menu → Tools → MailHog → Start** (se existir).
-2. Ou arranque manualmente:
-   - executavel padrao: **`C:\laragon\bin\mailhog\MailHog.exe`** (duplo clique), **ou**
-   - **`scripts\start_mailhog.bat`** (usa `C:\laragon\bin\mailhog\MailHog.exe`).
-3. Se a pasta `bin\mailhog` nao existir, instale uma vez:
+1. Try in Laragon: **Menu → Tools → MailHog → Start** (if available).
+2. Or start it manually:
+   - Default executable: **`C:\laragon\bin\mailhog\MailHog.exe`** (double-click), **or**
+   - **`scripts\start_mailhog.bat`** (uses `C:\laragon\bin\mailhog\MailHog.exe`).
+3. If `bin\mailhog` is missing, install once:
    ```powershell
    cd scripts
    powershell -ExecutionPolicy Bypass -File .\install_mailhog_laragon.ps1
    ```
-   (Use `-LaragonRoot "D:\laragon"` se o Laragon nao estiver em `C:\laragon`.)
+   (Use `-LaragonRoot "D:\laragon"` if Laragon is not under `C:\laragon`.)
 
-**Interface web (caixa de entrada de teste):** abra no navegador **http://localhost:8025** — ai aparecem os e-mails “Esqueci minha senha” com o link de redefinicao.
+**Web UI (test inbox):** open **http://localhost:8025** in the browser — “Forgot password” emails and reset links appear there.
 
-**Opcional:** no Laragon, **Menu → Laragon → Procfile**, adicione uma linha para o MailHog subir com o ambiente, por exemplo `MailHog: autorun C:\laragon\bin\mailhog\MailHog.exe`, e reinicie o Laragon.
+**Optional:** In Laragon, **Menu → Laragon → Procfile**, add a line so MailHog starts with the stack, e.g. `MailHog: autorun C:\laragon\bin\mailhog\MailHog.exe`, then restart Laragon.
 
-Em producao, desative SMTP local (`mail_smtp_enabled = false`) e configure envio real.
+In production, disable local SMTP (`mail_smtp_enabled = false`) and configure real outbound mail.
 
-## Como testar
+## How to test
 
-- Teste automatizado:
+- Automated:
   - `php tests/run_tests.php`
-- Teste manual recomendado:
-  - Login valido e invalido.
-  - Primeiro acesso com senha temporaria.
-  - Recuperacao de senha e tentativa de reuso de token.
+- Manual checks:
+  - Valid and invalid login.
+  - First access with a temporary password.
+  - Password recovery and token reuse attempt.
 
-## Decisoes tecnicas
+## Technical choices
 
-- **PDO unificado** para reduzir inconsistencias de acesso a dados.
-- **Camada de servico/repositorio** para separar regra de negocio de persistencia.
-- **Mensagens de erro genericas** para nao expor detalhes internos ao usuario.
+- **Unified PDO** to keep data access consistent.
+- **Service/repository layer** to separate business logic from persistence.
+- **Generic error messages** so internal details are not exposed to users.
 
-## Melhorias futuras
+## Future improvements
 
-- Migrar configuracao para variaveis de ambiente (`.env`).
-- Adicionar logs estruturados.
-- Introduzir PHPUnit e pipeline CI para execucao de testes.
+- Move configuration to environment variables (`.env`).
+- Add structured logging.
+- Introduce PHPUnit and a CI pipeline for tests.
 
+## Git tags
+
+### `v1.0.0`
+
+Versão inicial estável da aplicação de autenticação: interface e textos voltados exclusivamente ao público em **português**. Use esta tag se precisar reproduzir o comportamento ou o conjunto de strings da primeira release sem suporte a outros idiomas.
+
+### `v1.1.0`
+
+Release that introduces **multilingual** UI strings and locale handling.
+
+- **PT:** Versão com interface e mensagens disponíveis em português, italiano, inglês e espanhol; escolha esta tag para ambientes multilíngues.
+- **IT:** Versione con interfaccia e messaggi in portoghese, italiano, inglese e spagnolo; usare questo tag per ambienti multilingue.
+- **EN:** Build with Portuguese, Italian, English, and Spanish strings; use this tag when you need those four locales.
+- **ES:** Versión con interfaz y textos en portugués, italiano, inglés y español; usa esta etiqueta para despliegues multilingües.
