@@ -1,0 +1,167 @@
+body.login-body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #4f46e5, #312e81 45%, #0f172a 90%);
+  color: #0f172a;
+}
+
+.login-card {
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+}
+
+.login-card .card-body {
+  padding: 2.5rem 2rem;
+}
+
+@media (min-width: 768px) {
+  .login-card .card-body {
+    padding: 3rem;
+  }
+}
+
+.login-card h1 {
+  color: #111827;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-color: #e5e7eb;
+}
+
+.form-control:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+}
+
+.btn-primary {
+  border-radius: 999px;
+  padding: 0.7rem 1.25rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+}
+
+.forgot-link {
+  font-size: 0.9rem;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #4338ca;
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+}
+
+/*
+ * Erros sempre abaixo do campo, fora da caixa do input (especialmente senha + olho).
+ * Bootstrap usa input ~ .invalid-feedback; aqui o feedback pode ficar depois de .password-field,
+ * então controlamos visibilidade com :has no .mb-3.
+ */
+.login-card .mb-3 > .invalid-feedback {
+  display: none;
+}
+
+.login-card .mb-3:has(> .form-control.is-invalid) > .invalid-feedback,
+.login-card .mb-3:has(.password-field .form-control.is-invalid) > .invalid-feedback {
+  display: block !important;
+}
+
+/*
+ * `.form-control` do Bootstrap usa width:100%, o que no flex empurra o olho para a linha de baixo.
+ * Solução: só o input + botão ficam em `.password-field-track` com nowrap e width:auto no input.
+ */
+.password-field {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.password-field:focus-within {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+}
+
+.password-field:has(.form-control.is-invalid) {
+  border-color: #dc3545;
+}
+
+.password-field:has(.form-control.is-invalid):focus-within {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.password-field-track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.password-field-track .form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
+  padding: 0.75rem 0.5rem 0.75rem 1rem;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.password-field-track .form-control:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.password-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.password-toggle:hover {
+  color: #4f46e5;
+}
+
+.password-toggle:focus {
+  outline: none;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid rgba(79, 70, 229, 0.45);
+  outline-offset: 2px;
+}
+
+.password-toggle i {
+  font-size: 1.15rem;
+  pointer-events: none;
+}
+
