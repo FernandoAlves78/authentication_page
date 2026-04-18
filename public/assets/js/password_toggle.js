@@ -1,4 +1,10 @@
 (function () {
+  var labels =
+    window.__PASSWORD_TOGGLE_LABELS || {
+      show: "Show password",
+      hide: "Hide password",
+    };
+
   document.querySelectorAll(".password-field").forEach(function (wrap) {
     var input = wrap.querySelector("input");
     var btn = wrap.querySelector(".password-toggle");
@@ -12,7 +18,7 @@
       input.type = willShowPlain ? "text" : "password";
       btn.setAttribute(
         "aria-label",
-        willShowPlain ? "Ocultar senha" : "Mostrar senha"
+        willShowPlain ? labels.hide : labels.show
       );
       btn.setAttribute("aria-pressed", willShowPlain ? "true" : "false");
       if (icon) {

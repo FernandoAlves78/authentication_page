@@ -1,0 +1,98 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'common.password_show' => 'Show password',
+    'common.password_hide' => 'Hide password',
+
+    'login.page_title' => 'Sign in',
+    'login.heading' => 'Sign in',
+    'login.email_label' => 'Email',
+    'login.email_placeholder' => 'yourname@example.com',
+    'login.password_label' => 'Password',
+    'login.password_placeholder' => 'Enter your password',
+    'login.submit' => 'Sign in',
+    'login.forgot_password' => 'Forgot password',
+    'login.lang_label' => 'Language',
+
+    'validation.email_required' => 'Email is required.',
+    'validation.email_invalid' => 'Please enter a valid email address.',
+    'validation.password_required' => 'Password is required.',
+    'validation.password_min' => 'Password must be at least 8 characters.',
+    'validation.password_confirm_required' => 'Confirm your password.',
+
+    'forgot.page_title' => 'Reset password',
+    'forgot.heading' => 'Reset password',
+    'forgot.intro' => 'Enter your email. If it is registered, you will receive a link to reset your password.',
+    'forgot.email_label' => 'Email',
+    'forgot.submit' => 'Send reset link',
+    'forgot.back_login' => 'Back to sign in',
+
+    'forgot_sent.page_title' => 'Password recovery',
+    'forgot_sent.heading' => 'Password recovery',
+    'forgot_sent.message' => 'If the email is registered, you will receive instructions to reset your password.',
+    'forgot_sent.back_login' => 'Back to sign in',
+
+    'login_failed.page_title' => 'Sign-in failed',
+    'login_failed.heading' => 'Invalid credentials',
+    'login_failed.message' => 'Incorrect email or password.',
+    'login_failed.message_csrf' => 'Your session expired or the form is invalid. Return to sign in and try again.',
+    'login_failed.message_rate_limit' => 'Too many sign-in attempts. Wait a few minutes and try again.',
+    'login_failed.message_validation' => 'Please enter both email and password correctly.',
+    'login_failed.retry' => 'Try again',
+
+    'reset_failed.page_title' => 'Password reset failed',
+    'reset_failed.heading' => 'Could not reset password',
+    'reset_failed.message' => 'The link may be invalid or expired, or an unexpected error occurred.',
+    'reset_failed.request_new' => 'Request a new link',
+
+    'reset_success.page_title' => 'Password updated',
+    'reset_success.heading' => 'Password updated successfully',
+    'reset_success.message' => 'You can now sign in with your new password.',
+    'reset_success.go_login' => 'Go to sign in',
+
+    'reset.invalid.page_title' => 'Invalid link',
+    'reset.invalid.heading' => 'Invalid or expired reset link',
+    'reset.invalid.help' => 'Possible reasons: the link is older than 30 minutes, a newer recovery request replaced it, or the address was copied incompletely.',
+    'reset.invalid.web_public_hint' => 'If your site uses a path in the URL (e.g. /authentication_page/public/), check the web_public_path constant in config/config.php.',
+    'reset.invalid.request_new' => 'Request a new password reset.',
+    'reset.invalid.back_forgot' => 'Back to password recovery',
+
+    'reset.form.page_title' => 'Reset password',
+    'reset.form.heading' => 'Set a new password',
+    'reset.form.new_password' => 'New password',
+    'reset.form.confirm_password' => 'Confirm new password',
+    'reset.form.submit' => 'Save new password',
+
+    'dashboard.page_title' => 'Dashboard',
+    'dashboard.first_access_heading' => 'First sign-in',
+    'dashboard.first_access_intro' => 'You must set a new password.',
+    'dashboard.password_label' => 'Password',
+    'dashboard.confirm_label' => 'Confirm password',
+    'dashboard.match_help_initial' => 'Enter the same password to confirm.',
+    'dashboard.error_length' => 'Password must be at least 8 characters.',
+    'dashboard.error_mismatch' => 'Passwords do not match. Please try again.',
+    'dashboard.error_csrf' => 'Your session expired. Refresh the page and try again.',
+    'dashboard.error_generic' => 'Could not save the new password. Check the fields and try again.',
+    'dashboard.error_empty' => 'Fill in both password fields.',
+    'dashboard.submit_password' => 'Save new password',
+    'dashboard.logged_in_heading' => 'Signed in successfully',
+    'dashboard.logged_in_intro' => 'You are authenticated.',
+    'dashboard.password_updated' => 'Password updated successfully.',
+    'dashboard.logout' => 'Sign out',
+
+    'dashboard.js.match_initial' => 'Enter the same password to confirm.',
+    'dashboard.js.match_short' => 'Password must be at least 8 characters.',
+    'dashboard.js.match_mismatch' => 'Passwords do not match.',
+    'dashboard.js.match_match' => 'Passwords match.',
+
+    'email.salutation' => 'Hello,',
+    'email.reset_subject' => 'Password reset',
+    'email.reset_plain_opening' => 'We received a request to reset your password.',
+    'email.reset_plain_instruction' => 'Open the link below in your browser (valid for 30 minutes). Keep the URL on a single line when copying:',
+    'email.reset_plain_ignore' => 'If you did not request this, you can ignore this email.',
+    'email.reset_html_button' => 'Reset password',
+    'email.reset_html_hint' => 'Valid for 30 minutes. If the button does not work, copy the full address:',
+    'email.reset_html_ignore' => 'If you did not request this, you can ignore this email.',
+];

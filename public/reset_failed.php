@@ -1,11 +1,23 @@
 <?php
+require_once __DIR__ . '/../src/Support/i18n.php';
+
+$reason = isset($_GET['reason']) ? (string) $_GET['reason'] : '';
+if ($reason === 'csrf') {
+    $failMessage = t('reset_failed.message_csrf');
+} elseif ($reason === 'rate_limit') {
+    $failMessage = t('reset_failed.message_rate_limit');
+} elseif ($reason === 'validation') {
+    $failMessage = t('reset_failed.message_validation');
+} else {
+    $failMessage = t('reset_failed.message');
+}
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="<?php echo htmlspecialchars(html_lang_attribute(), ENT_QUOTES, 'UTF-8'); ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Falha na redefinicao de senha</title>
+  <title><?php echo htmlspecialchars(t('reset_failed.page_title'), ENT_QUOTES, 'UTF-8'); ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body class="bg-light d-flex align-items-center min-vh-100">
@@ -14,9 +26,9 @@
       <div class="col-md-6 col-lg-4">
         <div class="card shadow-sm">
           <div class="card-body text-center">
-            <h1 class="h4 mb-3">Nao foi possivel redefinir a senha</h1>
-            <p class="mb-3">O link pode estar invalido, expirado ou ocorreu um erro inesperado.</p>
-            <a href="forgot_password.php" class="btn btn-primary">Solicitar novo link</a>
+            <h1 class="h4 mb-3"><?php echo htmlspecialchars(t('reset_failed.heading'), ENT_QUOTES, 'UTF-8'); ?></h1>
+            <p class="mb-3"><?php echo htmlspecialchars($failMessage, ENT_QUOTES, 'UTF-8'); ?></p>
+            <a href="forgot_password.php" class="btn btn-primary"><?php echo htmlspecialchars(t('reset_failed.request_new'), ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
         </div>
       </div>
@@ -24,4 +36,3 @@
   </div>
 </body>
 </html>
-

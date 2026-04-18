@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Support/connection.php';
+require_once __DIR__ . '/../Support/i18n.php';
 require_once __DIR__ . '/../Repositories/AuthRepository.php';
 require_once __DIR__ . '/../Services/AuthService.php';
 
@@ -160,16 +161,22 @@ function handleLoginRequest(): void
 {
     startSecureSession();
     if (!verifyCsrfToken($_POST['csrf_token'] ?? null)) {
-        header('Location: login_failed.php');
+        header('Location: login_failed.php?reason=csrf');
         exit;
     }
     $email = strtolower(trim((string) ($_POST['email'] ?? '')));
     $password = (string) ($_POST['password'] ?? '');
     $identifier = 'login:' . $email . '|' . getClientIp();
 
-    if ($email === '' || $password === '' || isRateLimited('login', $identifier, LOGIN_RATE_LIMIT_MAX_ATTEMPTS)) {
+    if ($email === '' || $password === '') {
         registerFailedAttempt('login', $identifier);
-        header('Location: login_failed.php');
+        header('Location: login_failed.php?reason=validation');
+        exit;
+    }
+
+    if (isRateLimited('login', $identifier, LOGIN_RATE_LIMIT_MAX_ATTEMPTS)) {
+        registerFailedAttempt('login', $identifier);
+        header('Location: login_failed.php?reason=rate_limit');
         exit;
     }
 
@@ -195,21 +202,25 @@ function createPasswordResetToken(int $userId): string
 function sendPasswordResetEmail(string $email, string $token): void
 {
     $resetLink = buildPasswordResetUrl($token);
-    $subject = 'Redefinicao de senha';
-    $plainMessage = "Ola,\n\nRecebemos uma solicitacao para redefinir sua senha.\n";
-    $plainMessage .= "Abra o link abaixo no navegador (valido por 30 minutos). Mantenha o endereco numa unica linha ao copiar:\n\n";
+    $subject = t('email.reset_subject');
+    $team = htmlspecialchars(Config::mail_from_name, ENT_QUOTES, 'UTF-8');
+    $plainMessage = t('email.salutation') . "\n\n";
+    $plainMessage .= t('email.reset_plain_opening') . "\n";
+    $plainMessage .= t('email.reset_plain_instruction') . "\n\n";
     $plainMessage .= $resetLink . "\n\n";
-    $plainMessage .= "Se voce nao solicitou essa alteracao, pode ignorar este e-mail.\n\nEquipe " . Config::mail_from_name . "\n";
+    $plainMessage .= t('email.reset_plain_ignore') . "\n\n— " . Config::mail_from_name . "\n";
 
     $safeHref = htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8');
     $safeLinkText = htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8');
-    $htmlMessage = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"></head><body>';
-    $htmlMessage .= '<p>Ola,</p><p>Recebemos uma solicitacao para redefinir sua senha.</p>';
-    $htmlMessage .= '<p><a href="' . $safeHref . '">Redefinir senha</a></p>';
-    $htmlMessage .= '<p style="font-size:12px;color:#555">Valido por 30 minutos. Se o botao nao funcionar, copie o endereco completo:</p>';
+    $langAttr = htmlspecialchars(html_lang_attribute(), ENT_QUOTES, 'UTF-8');
+    $htmlMessage = '<!DOCTYPE html><html lang="' . $langAttr . '"><head><meta charset="UTF-8"></head><body>';
+    $htmlMessage .= '<p>' . htmlspecialchars(t('email.salutation'), ENT_QUOTES, 'UTF-8') . '</p>';
+    $htmlMessage .= '<p>' . htmlspecialchars(t('email.reset_plain_opening'), ENT_QUOTES, 'UTF-8') . '</p>';
+    $htmlMessage .= '<p><a href="' . $safeHref . '">' . htmlspecialchars(t('email.reset_html_button'), ENT_QUOTES, 'UTF-8') . '</a></p>';
+    $htmlMessage .= '<p style="font-size:12px;color:#555">' . htmlspecialchars(t('email.reset_html_hint'), ENT_QUOTES, 'UTF-8') . '</p>';
     $htmlMessage .= '<p style="word-break:break-all;font-size:12px">' . $safeLinkText . '</p>';
-    $htmlMessage .= '<p>Se voce nao solicitou essa alteracao, pode ignorar este e-mail.</p>';
-    $htmlMessage .= '<p>— ' . htmlspecialchars(Config::mail_from_name, ENT_QUOTES, 'UTF-8') . '</p>';
+    $htmlMessage .= '<p>' . htmlspecialchars(t('email.reset_html_ignore'), ENT_QUOTES, 'UTF-8') . '</p>';
+    $htmlMessage .= '<p>— ' . $team . '</p>';
     $htmlMessage .= '</body></html>';
 
     $headersHtml = [
@@ -242,7 +253,7 @@ function handleForgotPasswordRequest(): void
 {
     startSecureSession();
     if (!verifyCsrfToken($_POST['csrf_token'] ?? null)) {
-        header('Location: forgot_password.php');
+        header('Location: forgot_password.php?error=csrf');
         exit;
     }
     $email = strtolower(trim((string) ($_POST['email'] ?? '')));
@@ -255,7 +266,15 @@ function handleForgotPasswordRequest(): void
     } else {
         registerFailedAttempt('recovery', $identifier);
     }
-    echo '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Recuperacao de senha</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></head><body class="bg-light d-flex align-items-center min-vh-100"><div class="container"><div class="row justify-content-center"><div class="col-md-6 col-lg-4"><div class="card shadow-sm"><div class="card-body"><h1 class="h4 mb-3 text-center">Recuperacao de senha</h1><p class="mb-3">Se o e-mail informado estiver cadastrado, voce recebera instrucoes para redefinir sua senha.</p><div class="text-center mt-3"><a href="index.php" class="btn btn-primary">Voltar ao login</a></div></div></div></div></div></div></body></html>';
+    $fh = htmlspecialchars(t('forgot_sent.page_title'), ENT_QUOTES, 'UTF-8');
+    $fh2 = htmlspecialchars(t('forgot_sent.heading'), ENT_QUOTES, 'UTF-8');
+    $msg = htmlspecialchars(t('forgot_sent.message'), ENT_QUOTES, 'UTF-8');
+    $btn = htmlspecialchars(t('forgot_sent.back_login'), ENT_QUOTES, 'UTF-8');
+    $hl = htmlspecialchars(html_lang_attribute(), ENT_QUOTES, 'UTF-8');
+    echo '<!DOCTYPE html><html lang="' . $hl . '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>'
+        . $fh . '</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></head><body class="bg-light d-flex align-items-center min-vh-100"><div class="container"><div class="row justify-content-center"><div class="col-md-6 col-lg-4"><div class="card shadow-sm"><div class="card-body"><h1 class="h4 mb-3 text-center">'
+        . $fh2 . '</h1><p class="mb-3">' . $msg . '</p><div class="text-center mt-3"><a href="index.php" class="btn btn-primary">'
+        . $btn . '</a></div></div></div></div></div></div></body></html>';
 }
 
 function findValidPasswordResetToken(string $token): ?array
@@ -287,7 +306,7 @@ function handleResetPasswordRequest(): void
 {
     startSecureSession();
     if (!verifyCsrfToken($_POST['csrf_token'] ?? null)) {
-        header('Location: reset_failed.php');
+        header('Location: reset_failed.php?reason=csrf');
         exit;
     }
     $token = (string) ($_POST['token'] ?? '');
@@ -295,14 +314,21 @@ function handleResetPasswordRequest(): void
     $passwordConfirm = (string) ($_POST['password_confirm'] ?? '');
     $identifier = 'recovery_confirm:' . getClientIp();
 
+    if (isRateLimited('recovery_confirm', $identifier, RECOVERY_RATE_LIMIT_MAX_ATTEMPTS)) {
+        registerFailedAttempt('recovery_confirm', $identifier);
+        header('Location: reset_failed.php?reason=rate_limit');
+        exit;
+    }
+
     if (
-        $token === '' || $password === '' || $passwordConfirm === ''
+        $token === ''
+        || $password === ''
+        || $passwordConfirm === ''
         || strlen($password) < MIN_PASSWORD_LENGTH
         || $password !== $passwordConfirm
-        || isRateLimited('recovery_confirm', $identifier, RECOVERY_RATE_LIMIT_MAX_ATTEMPTS)
     ) {
         registerFailedAttempt('recovery_confirm', $identifier);
-        header('Location: reset_failed.php');
+        header('Location: reset_failed.php?reason=validation');
         exit;
     }
 

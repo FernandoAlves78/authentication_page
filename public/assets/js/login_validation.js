@@ -4,6 +4,8 @@ const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
+const MSG = window.__LOGIN_VALIDATION__ || {};
+
 function isValidEmail(value) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(value);
@@ -14,12 +16,12 @@ function validateEmail() {
   const value = emailInput.value.trim();
   if (!value) {
     emailInput.classList.add("is-invalid");
-    emailError.textContent = "O e-mail e obrigatorio.";
+    emailError.textContent = MSG.emailRequired ?? "";
     return false;
   }
   if (!isValidEmail(value)) {
     emailInput.classList.add("is-invalid");
-    emailError.textContent = "Informe um e-mail valido.";
+    emailError.textContent = MSG.emailInvalid;
     return false;
   }
   emailInput.classList.remove("is-invalid");
@@ -31,12 +33,12 @@ function validatePassword() {
   const value = passwordInput.value;
   if (!value) {
     passwordInput.classList.add("is-invalid");
-    passwordError.textContent = "A senha e obrigatoria.";
+    passwordError.textContent = MSG.passwordRequired ?? "";
     return false;
   }
   if (value.length < 8) {
     passwordInput.classList.add("is-invalid");
-    passwordError.textContent = "A senha deve ter pelo menos 8 caracteres.";
+    passwordError.textContent = MSG.passwordMin ?? "";
     return false;
   }
   passwordInput.classList.remove("is-invalid");
@@ -52,4 +54,3 @@ if (loginForm) {
     }
   });
 }
-
