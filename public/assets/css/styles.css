@@ -183,9 +183,9 @@ body.login-body {
 .auth-lang-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
   margin: 0;
-  padding: 0.38rem 0.7rem 0.38rem 1rem;
+  padding: 0.38rem 0.55rem 0.38rem 0.55rem;
   border-radius: 999px;
   border: 1px solid rgba(15, 23, 42, 0.1);
   background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
@@ -236,6 +236,14 @@ body.login-body {
 .auth-lang-current {
   min-width: 2.25rem;
   text-align: left;
+}
+
+.auth-lang-flag {
+  display: inline-block;
+  width: 1.15rem;
+  height: 0.86rem;
+  border-radius: 0.15rem;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
 }
 
 .auth-lang-chevron {
@@ -295,8 +303,12 @@ body.login-body {
 }
 
 .auth-lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
   margin: 0;
-  padding: 0.55rem 0.85rem;
+  padding: 0.5rem 0.65rem;
   border-radius: 0.55rem;
   font-size: 0.8125rem;
   font-weight: 600;

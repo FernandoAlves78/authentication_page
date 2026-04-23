@@ -53,6 +53,7 @@ $hl = htmlspecialchars(html_lang_attribute(), ENT_QUOTES, 'UTF-8');
   <title><?php echo htmlspecialchars(t('reset.form.page_title'), ENT_QUOTES, 'UTF-8'); ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
 <body class="bg-light d-flex align-items-center min-vh-100">

@@ -28,7 +28,7 @@ if ($reason === 'csrf') {
           <div class="card-body text-center">
             <h1 class="h4 mb-3"><?php echo htmlspecialchars(t('login_failed.heading'), ENT_QUOTES, 'UTF-8'); ?></h1>
             <p class="mb-3"><?php echo htmlspecialchars($failMessage, ENT_QUOTES, 'UTF-8'); ?></p>
-            <a href="index.php" class="btn btn-primary"><?php echo htmlspecialchars(t('login_failed.retry'), ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="../index.php" class="btn btn-primary"><?php echo htmlspecialchars(t('login_failed.retry'), ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
         </div>
       </div>

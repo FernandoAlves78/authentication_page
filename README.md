@@ -32,7 +32,7 @@ A PHP authentication project showcasing solid backend practices, security, and c
 1. Copy `config/config.example.php` to `config/config.php` and set your credentials.
 2. Import `database/schema.sql` into MySQL.
 3. (Optional) Run `php database/seeds/create_demo_user.php`.
-4. Serve the project from Laragon and open `http://localhost/authentication_page/public`.
+4. Serve the project from Laragon and open `http://localhost/authentication_page/`.
 
 ## MailHog (password recovery email in development)
 
